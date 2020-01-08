@@ -1,10 +1,9 @@
 import taskerch as package
-
+from taskerch import _shared
 import setuptools
 
 with open("README.md", "r") as fp:
     long_description = fp.read()
-
 setuptools.setup(
     name="TaskerCH",
     version=package.__version__,

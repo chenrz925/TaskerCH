@@ -12,5 +12,13 @@ class Shared(metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstractmethod
+    def __delitem__(self, key: Text) -> NoReturn:
+        raise NotImplementedError()
+
+    @abstractmethod
     def sync(self) -> NoReturn:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def clean(self) -> NoReturn:
         raise NotImplementedError()

@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
-from typing import Dict, Text, Any
+from typing import Dict, Text, Any, NoReturn
+
 import taskerch._const as const
+from taskerch._shared import Shared
 
 
 class Namespace:
@@ -39,36 +41,50 @@ class Namespace:
     def __delattr__(self, item):
         raise RuntimeError(const.ERROR_OPERATION_NOT_ALLOWED)
 
+    @property
+    def dict(self):
+        return self.__dict__
+
 
 class Task(metaclass=ABCMeta):
     """
     The fundamental unit to execute. You don't need to modify the `__init__` function and all configurations in TOML will be inject into `self.config`.
     """
 
-    def __init__(self, config: Dict[Text, Any], shared: Dict[Text, Any]):
+    def __init__(self, config: Namespace, shared: Shared):
         """
 
         :param config:
         :param shared:
         """
-        self.__dict__.update(config)
+        super(Task, self).__setattr__('_config', config)
         super(Task, self).__setattr__('_shared', shared)
 
     @property
-    def shared(self) -> Dict[Text, Any]:
-        return self._shared
+    def config(self) -> Namespace:
+        return super(Task, self).__getattribute__('_config')
 
-    def __setattr__(self, key, value):
-        if key == '_shared':
-            raise RuntimeError(const.ERROR_OPERATION_NOT_ALLOWED)
+    @property
+    def shared(self) -> Shared:
+        return super(Task, self).__getattribute__('_shared')
+
+    def __getattribute__(self, key: Text) -> Any:
+        if key not in ['_config', '_shared']:
+            return super(Task, self).__getattribute__(key)
         else:
+            raise RuntimeError(const.ERROR_OPERATION_NOT_ALLOWED)
+
+    def __setattr__(self, key: Text, value: Any) -> NoReturn:
+        if key not in ['_config', '_shared']:
             super(Task, self).__setattr__(key, value)
-
-    def __delattr__(self, item):
-        if item == '_shared':
-            raise RuntimeError(const.ERROR_OPERATION_NOT_ALLOWED)
         else:
-            super(Task, self).__delattr__(item)
+            raise RuntimeError(const.ERROR_OPERATION_NOT_ALLOWED)
+
+    def __delitem__(self, key: Text) -> NoReturn:
+        if key not in ['_config', '_shared']:
+            super(Task, self).__delattr__(key)
+        else:
+            raise RuntimeError(const.ERROR_OPERATION_NOT_ALLOWED)
 
     @abstractmethod
     def __call__(self, *args, **kwargs):
