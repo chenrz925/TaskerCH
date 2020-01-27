@@ -1,0 +1,5 @@
+[a]
+    [b]
+        [c]
+            [d]
+            '@dep' = 'config/test-dep.toml'

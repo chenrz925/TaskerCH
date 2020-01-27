@@ -1,0 +1,7 @@
+[a]
+    [a.b]
+        [a.b.c]
+            [a.b.c.d]
+            '@dep' = 'config/test-dep.toml'
+            '#grid' = [1, 2, 3, 4]
+            '#val' = [10, 12, 14, 16]

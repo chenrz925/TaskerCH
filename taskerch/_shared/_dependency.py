@@ -5,10 +5,16 @@
 # Apache License Version 2.0. If a copy of the Apache
 # License was not distributed with this file, You can
 # obtain one at http://www.apache.org/licenses/LICENSE-2.0.
-from sys import argv as sys_argv
+from abc import ABCMeta, abstractmethod
 
-from ._launcher import Launcher
+from box import Box
 
-if __name__ == '__main__':
-    launcher = Launcher(*sys_argv[1:])
-    launcher()
+
+class Shared(Box, metaclass=ABCMeta):
+    @abstractmethod
+    def load(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def dump(self):
+        raise NotImplementedError

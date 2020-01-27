@@ -1,16 +1,9 @@
-from taskerch._shared._base import Shared
-from taskerch.task import Namespace
+# -*- coding: utf-8 -*-
+# Copyright 2019-2020 Chen Runze. All Rights Reserved.
+#
+# This Source Code Form is subject to the terms of the
+# Apache License Version 2.0. If a copy of the Apache
+# License was not distributed with this file, You can
+# obtain one at http://www.apache.org/licenses/LICENSE-2.0.
 
-
-class SharedBuilder(object):
-    _support_backends = {
-        'dict': {
-            'module': 'taskerch._shared._dict',
-            'class': 'DictShared',
-            'require': []
-        },
-    }
-
-    def __init__(self, config: Namespace=None):
-        pass
-
+from ._dependency import Shared
